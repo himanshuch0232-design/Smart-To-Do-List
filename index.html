@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart To-Do List | Organize Your Life, One Task at a Time</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        slate: {
+                            850: '#1a2332',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
+                        'soft': '0 4px 20px rgba(0, 0, 0, 0.08)',
+                        'card': '0 2px 12px rgba(0, 0, 0, 0.06)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 50%, #e0f2fe 100%);
+        }
+        .dark .gradient-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%);
+        }
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(37, 99, 235, 0.15);
+        }
+        .transition-all { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .nav-blur {
+            backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, 0.85);
+        }
+        .dark .nav-blur {
+            background: rgba(15, 23, 42, 0.85);
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .float-anim { animation: float 6s ease-in-out infinite; }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen text-slate-800 dark:text-slate-100 transition-colors duration-300">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 nav-blur border-b border-slate-200/50 dark:border-slate-700/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <div class="w-9 h-9 rounded-xl bg-primary-600 flex items-center justify-center shadow-lg shadow-primary-500/30">
+                        <i class="fas fa-check-double text-white text-sm"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight">Smart<span class="text-primary-600">ToDo</span></span>
+                </div>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#features" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary-600 transition-colors">Features</a>
+                    <a href="#how-it-works" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary-600 transition-colors">How It Works</a>
+                    <a href="#cloud" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary-600 transition-colors">Cloud Tech</a>
+                    <a href="#about" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary-600 transition-colors">About</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="theme-toggle" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Toggle theme">
+                        <i class="fas fa-moon text-slate-600 dark:text-slate-300 dark:hidden"></i>
+                        <i class="fas fa-sun text-amber-400 hidden dark:inline"></i>
+                    </button>
+                    <a href="login.html" class="text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-primary-600 px-3 py-2">Login</a>
+                    <a href="register.html" class="bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-lg shadow-primary-500/25 transition-all hover:shadow-primary-500/40">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-28 pb-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-8">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm font-medium border border-primary-100 dark:border-primary-800">
+                        <i class="fas fa-cloud text-xs"></i>
+                        Cloud-Powered Productivity
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight">
+                        Organize Your Life,<br>
+                        <span class="text-primary-600">One Task at a Time.</span>
+                    </h1>
+                    <p class="text-lg text-slate-600 dark:text-slate-300 max-w-lg leading-relaxed">
+                        Smart To-Do List is a modern, cloud-based task management platform designed to help students and professionals stay productive, focused, and in control of their day.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="register.html" class="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-7 py-3.5 rounded-xl shadow-lg shadow-primary-500/30 transition-all hover:scale-[1.02]">
+                            Get Started Free
+                            <i class="fas fa-arrow-right text-sm"></i>
+                        </a>
+                        <a href="login.html" class="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-semibold px-7 py-3.5 rounded-xl shadow-soft hover:shadow-md transition-all">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login
+                        </a>
+                    </div>
+                    <div class="flex items-center gap-6 pt-2">
+                        <div class="flex -space-x-2">
+                            <div class="w-9 h-9 rounded-full bg-primary-500 border-2 border-white dark:border-slate-900 flex items-center justify-center text-white text-xs font-bold">A</div>
+                            <div class="w-9 h-9 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900 flex items-center justify-center text-white text-xs font-bold">B</div>
+                            <div class="w-9 h-9 rounded-full bg-violet-500 border-2 border-white dark:border-slate-900 flex items-center justify-center text-white text-xs font-bold">C</div>
+                        </div>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Trusted by students & teams worldwide</p>
+                    </div>
+                </div>
+                <div class="relative float-anim">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-200/50 dark:border-slate-700/50 bg-white dark:bg-slate-800">
+                        <!-- Mock Dashboard Preview -->
+                        <div class="bg-slate-50 dark:bg-slate-900 px-4 py-3 border-b border-slate-200 dark:border-slate-700 flex items-center gap-2">
+                            <div class="flex gap-1.5">
+                                <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-emerald-400"></div>
+                            </div>
+                            <div class="flex-1 text-center text-xs text-slate-400 font-medium">Smart To-Do Dashboard</div>
+                        </div>
+                        <div class="p-5 space-y-4">
+                            <div class="grid grid-cols-4 gap-3">
+                                <div class="bg-primary-50 dark:bg-primary-900/40 rounded-xl p-3 text-center">
+                                    <div class="text-2xl font-bold text-primary-600">24</div>
+                                    <div class="text-[10px] text-slate-500 uppercase tracking-wide">Total</div>
+                                </div>
+                                <div class="bg-emerald-50 dark:bg-emerald-900/30 rounded-xl p-3 text-center">
+                                    <div class="text-2xl font-bold text-emerald-600">18</div>
+                                    <div class="text-[10px] text-slate-500 uppercase tracking-wide">Done</div>
+                                </div>
+                                <div class="bg-amber-50 dark:bg-amber-900/30 rounded-xl p-3 text-center">
+                                    <div class="text-2xl font-bold text-amber-600">5</div>
+                                    <div class="text-[10px] text-slate-500 uppercase tracking-wide">Pending</div>
+                                </div>
+                                <div class="bg-rose-50 dark:bg-rose-900/30 rounded-xl p-3 text-center">
+                                    <div class="text-2xl font-bold text-rose-600">1</div>
+                                    <div class="text-[10px] text-slate-500 uppercase tracking-wide">Overdue</div>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-700/50 border border-slate-100 dark:border-slate-600">
+                                    <div class="w-5 h-5 rounded-md border-2 border-primary-500 flex items-center justify-center bg-primary-500">
+                                        <i class="fas fa-check text-white text-[10px]"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="text-sm font-medium">Complete project report</div>
+                                        <div class="text-xs text-slate-400">Today · High Priority</div>
+                                    </div>
+                                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-red-100 text-red-600 font-medium">High</span>
+                                </div>
+                                <div class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-700/50 border border-slate-100 dark:border-slate-600">
+                                    <div class="w-5 h-5 rounded-md border-2 border-slate-300 dark:border-slate-500"></div>
+                                    <div class="flex-1">
+                                        <div class="text-sm font-medium">Team meeting at 3 PM</div>
+                                        <div class="text-xs text-slate-400">Today · Medium</div>
+                                    </div>
+                                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-600 font-medium">Med</span>
+                                </div>
+                                <div class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-700/50 border border-slate-100 dark:border-slate-600">
+                                    <div class="w-5 h-5 rounded-md border-2 border-slate-300 dark:border-slate-500"></div>
+                                    <div class="flex-1">
+                                        <div class="text-sm font-medium">Review cloud architecture notes</div>
+                                        <div class="text-xs text-slate-400">Tomorrow · Low</div>
+                                    </div>
+                                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">Low</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Decorative elements -->
+                    <div class="absolute -z-10 -top-6 -right-6 w-72 h-72 bg-primary-400/20 rounded-full blur-3xl"></div>
+                    <div class="absolute -z-10 -bottom-8 -left-8 w-56 h-56 bg-sky-300/20 rounded-full blur-3xl"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 px-4 sm:px-6 lg:px-8 bg-white/50 dark:bg-slate-900/50">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">Everything you need to stay productive</h2>
+                <p class="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">Powerful features designed for modern students and professionals who want clarity and control over their tasks.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="feature-card bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-card border border-slate-100 dark:border-slate-700 transition-all">
+                    <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center mb-4">
+                        <i class="fas fa-tasks text-primary-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Smart Task Management</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Create, organize, and prioritize tasks with due dates, priorities, categories, and detailed descriptions.</p>
+                </div>
+                <div class="feature-card bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-card border border-slate-100 dark:border-slate-700 transition-all">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-line text-emerald-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Productivity Analytics</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Track completion rates, weekly progress, and daily productivity with beautiful visual charts.</p>
+                </div>
+                <div class="feature-card bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-card border border-slate-100 dark:border-slate-700 transition-all">
+                    <div class="w-12 h-12 rounded-xl bg-violet-100 dark:bg-violet-900/40 flex items-center justify-center mb-4">
+                        <i class="fas fa-cloud text-violet-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Cloud Sync</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Access your tasks from any device. Your data stays secure and synchronized in the cloud.</p>
+                </div>
+                <div class="feature-card bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-card border border-slate-100 dark:border-slate-700 transition-all">
+                    <div class="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center mb-4">
+                        <i class="fas fa-calendar-alt text-amber-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Calendar & Deadlines</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">View upcoming deadlines, plan your week, and never miss an important due date again.</p>
+                </div>
+                <div class="feature-card bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-card border border-slate-100 dark:border-slate-700 transition-all">
+                    <div class="w-12 h-12 rounded-xl bg-rose-100 dark:bg-rose-900/40 flex items-center justify-center mb-4">
+                        <i class="fas fa-tags text-rose-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Categories & Filters</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Organize by Personal, Work, Study, Health and more. Filter by priority, status, or date.</p>
+                </div>
+                <div class="feature-card bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-card border border-slate-100 dark:border-slate-700 transition-all">
+                    <div class="w-12 h-12 rounded-xl bg-sky-100 dark:bg-sky-900/40 flex items-center justify-center mb-4">
+                        <i class="fas fa-moon text-sky-600 text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Light & Dark Mode</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Beautiful interface that adapts to your preference. Work comfortably any time of day.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">How It Works</h2>
+                <p class="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">Get started in minutes and take control of your productivity.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 rounded-2xl bg-primary-600 text-white flex items-center justify-center text-2xl font-bold mx-auto mb-5 shadow-lg shadow-primary-500/30">1</div>
+                    <h3 class="font-semibold text-lg mb-2">Create Your Account</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm">Sign up with your email in seconds. Secure authentication keeps your data private.</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 rounded-2xl bg-primary-600 text-white flex items-center justify-center text-2xl font-bold mx-auto mb-5 shadow-lg shadow-primary-500/30">2</div>
+                    <h3 class="font-semibold text-lg mb-2">Add & Organize Tasks</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm">Add tasks with priorities, due dates, categories, and descriptions. Stay organized effortlessly.</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 rounded-2xl bg-primary-600 text-white flex items-center justify-center text-2xl font-bold mx-auto mb-5 shadow-lg shadow-primary-500/30">3</div>
+                    <h3 class="font-semibold text-lg mb-2">Track & Achieve</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm">Monitor progress with analytics, complete tasks, and build better productivity habits.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cloud Technology -->
+    <section id="cloud" class="py-20 px-4 sm:px-6 lg:px-8 bg-white/50 dark:bg-slate-900/50">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl sm:text-4xl font-bold mb-6">Built for the Cloud</h2>
+                    <p class="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                        Smart To-Do List is designed as a cloud-native application. Your tasks are stored securely and accessible from any device with an internet connection. This project demonstrates modern cloud computing principles including data persistence, user isolation, and scalable architecture patterns.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-primary-600 mt-1"></i>
+                            <span class="text-slate-700 dark:text-slate-300">Secure user authentication & session management</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-primary-600 mt-1"></i>
+                            <span class="text-slate-700 dark:text-slate-300">User-specific data isolation (multi-tenancy concept)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-primary-600 mt-1"></i>
+                            <span class="text-slate-700 dark:text-slate-300">Client-side storage with cloud-ready architecture</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-primary-600 mt-1"></i>
+                            <span class="text-slate-700 dark:text-slate-300">Responsive design for any device</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="glass rounded-2xl p-6 text-center shadow-glass">
+                        <i class="fas fa-server text-3xl text-primary-600 mb-3"></i>
+                        <div class="font-semibold">Scalable</div>
+                        <div class="text-xs text-slate-500 mt-1">Cloud Architecture</div>
+                    </div>
+                    <div class="glass rounded-2xl p-6 text-center shadow-glass">
+                        <i class="fas fa-shield-alt text-3xl text-emerald-600 mb-3"></i>
+                        <div class="font-semibold">Secure</div>
+                        <div class="text-xs text-slate-500 mt-1">Auth & Isolation</div>
+                    </div>
+                    <div class="glass rounded-2xl p-6 text-center shadow-glass">
+                        <i class="fas fa-sync-alt text-3xl text-violet-600 mb-3"></i>
+                        <div class="font-semibold">Synced</div>
+                        <div class="text-xs text-slate-500 mt-1">Always Available</div>
+                    </div>
+                    <div class="glass rounded-2xl p-6 text-center shadow-glass">
+                        <i class="fas fa-mobile-alt text-3xl text-amber-600 mb-3"></i>
+                        <div class="font-semibold">Responsive</div>
+                        <div class="text-xs text-slate-500 mt-1">Any Device</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="hero-gradient rounded-3xl p-12 shadow-2xl shadow-primary-500/20">
+                <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Ready to get organized?</h2>
+                <p class="text-primary-100 mb-8 max-w-xl mx-auto">Join Smart To-Do List today and experience a cleaner, smarter way to manage your tasks.</p>
+                <a href="register.html" class="inline-flex items-center gap-2 bg-white text-primary-700 font-semibold px-8 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]">
+                    Create Free Account
+                    <i class="fas fa-arrow-right text-sm"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="about" class="border-t border-slate-200 dark:border-slate-800 py-12 px-4 sm:px-6 lg:px-8 bg-white/30 dark:bg-slate-900/30">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 mb-10">
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center">
+                            <i class="fas fa-check-double text-white text-xs"></i>
+                        </div>
+                        <span class="font-bold text-lg">Smart<span class="text-primary-600">ToDo</span></span>
+                    </div>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 max-w-sm leading-relaxed">
+                        A modern cloud-based task management application developed as a BCA Cloud Computing academic project. Designed to demonstrate real-world SaaS principles and excellent user experience.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Product</h4>
+                    <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                        <li><a href="#features" class="hover:text-primary-600">Features</a></li>
+                        <li><a href="#how-it-works" class="hover:text-primary-600">How It Works</a></li>
+                        <li><a href="#cloud" class="hover:text-primary-600">Cloud Tech</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Project Info</h4>
+                    <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                        <li>BCA Cloud Computing</li>
+                        <li>Academic Project 2025-26</li>
+                        <li>Full-Stack Web Application</li>
+                        <li class="pt-2">
+                            <a href="mailto:support@smarttodo.app" class="hover:text-primary-600">
+                                <i class="fas fa-envelope mr-1"></i> Contact
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-slate-500">© 2025 Smart To-Do List. Academic Project. All rights reserved.</p>
+                <p class="text-xs text-slate-400">Built with ❤️ for Cloud Computing studies</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        
+        // Check saved theme or system preference
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        });
+
+        // Check if already logged in
+        if (localStorage.getItem('currentUser')) {
+            // Optional: redirect or show dashboard link
+        }
+    </script>
+</body>
+</html>
